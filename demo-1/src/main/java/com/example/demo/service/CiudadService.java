@@ -1,7 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.exceptions.CategoryNotFoundException;
-import com.example.demo.exceptions.CiudadNotFoundException;
 import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Ciudad;
 import com.example.demo.repository.CiudadRepository;

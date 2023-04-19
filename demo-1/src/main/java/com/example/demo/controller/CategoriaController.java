@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
-
-import com.example.demo.exceptions.CategoryNotFoundException;
+import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Categoria;
 import com.example.demo.service.CategoriaService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,14 +36,14 @@ public class CategoriaController {
 
     @Operation(summary = "updateCategoryById", security = {@SecurityRequirement(name = "jwt")})
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateById(@PathVariable int id, @RequestBody @Valid Categoria categoria) throws CategoryNotFoundException{
+    public ResponseEntity<String> updateById(@PathVariable int id, @RequestBody @Valid Categoria categoria) throws NotFoundException{
         service.updateById(id, categoria);
         return ResponseEntity.ok("Category: "+ categoria.getTitulo()+ "with id: "+ id + " modified");
     }
 
     @Operation(summary = "deleteCategoryById", security = {@SecurityRequirement(name = "jwt")})
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable int id)throws CategoryNotFoundException{
+    public ResponseEntity<String> deleteById(@PathVariable int id)throws NotFoundException {
         service.deleteById(id);
         return ResponseEntity.ok("Categoria con id: "+id + " eliminado");
     }

@@ -1,6 +1,7 @@
 package com.example.demo.exceptions;
 
 import com.example.demo.controller.CategoriaController;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -9,29 +10,32 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.LocalDateTime;
+
 @ControllerAdvice
 public class GlobalExceptions {
     private static final Logger logger= LoggerFactory.getLogger(CategoriaController.class);
 
-    @ExceptionHandler({CategoryNotFoundException.class})
-    public ResponseEntity<?>error(CategoryNotFoundException exception){
+    @ExceptionHandler({MethodArgumentNotValidException.class, BadRequestException.class})
+    public ResponseEntity<ApiError> error(MethodArgumentNotValidException exception, HttpServletRequest request){
+        ApiError apiError= new ApiError(
+                request.getRequestURI(),
+                exception.getMessage(),
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now()
+        );
         logger.error(exception.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
-    }
-    @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ResponseEntity<String> error(MethodArgumentNotValidException exception){
-        logger.error(exception.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
     }
     @ExceptionHandler({NotFoundException.class})
-    public ResponseEntity<String> error(NotFoundException exception){
+    public ResponseEntity<ApiError> error(NotFoundException exception, HttpServletRequest request){
+        ApiError apiError= new ApiError(
+                request.getRequestURI(),
+                exception.getMessage(),
+                HttpStatus.NOT_FOUND.value(),
+                LocalDateTime.now()
+        );
         logger.error(exception.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
     }
-    @ExceptionHandler({BadRequestException.class})
-    public ResponseEntity<String> error(BadRequestException exception){
-        logger.error(exception.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
-    }
-
 }
