@@ -3,8 +3,9 @@ package com.example.demo.service;
 import com.example.demo.model.Categoria;
 import com.example.demo.repository.CategoriaRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.webjars.NotFoundException;
+import com.example.demo.exceptions.NotFoundException;
 
 import java.util.List;
 
@@ -23,9 +24,7 @@ public class CategoriaService {
     public void updateById(int id, Categoria categoria) throws  NotFoundException{
         Categoria categoryExist= repository.findById(id)
                 .orElseThrow(()->new NotFoundException("Categoria no encontrada"));
-        categoryExist.setTitulo(categoria.getTitulo());
-        categoryExist.setDescripcion(categoria.getDescripcion());
-        categoryExist.setUrlImagen(categoria.getUrlImagen());
+        BeanUtils.copyProperties(categoria,categoryExist,"id");
         repository.save(categoryExist);
     }
     public void deleteById(int id) throws NotFoundException{

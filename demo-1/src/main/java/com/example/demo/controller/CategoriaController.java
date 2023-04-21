@@ -38,7 +38,7 @@ public class CategoriaController {
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateById(@PathVariable int id, @RequestBody @Valid Categoria categoria) throws NotFoundException{
         service.updateById(id, categoria);
-        return ResponseEntity.ok("Category: "+ categoria.getTitulo()+ "with id: "+ id + " modified");
+        return ResponseEntity.ok("Category: "+ categoria.getTitulo()+ " with id: "+ id + " modified");
     }
 
     @Operation(summary = "deleteCategoryById", security = {@SecurityRequirement(name = "jwt")})

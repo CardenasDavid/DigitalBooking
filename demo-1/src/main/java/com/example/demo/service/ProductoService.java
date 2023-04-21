@@ -5,6 +5,7 @@ import com.example.demo.exceptions.NotFoundException;
 import com.example.demo.model.Producto;
 import com.example.demo.repository.ProductoRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -23,16 +24,8 @@ public class ProductoService {
         repository.save(producto);
     }
     public void updateById(int id, Producto producto) throws NotFoundException {
-        repository.findById(id).orElseThrow(()->new NotFoundException("Producto no encontrado"));
-        Producto productExist=repository.findById(id).get();
-        productExist.setTitulo(producto.getTitulo());
-        productExist.setUbicacion(producto.getUbicacion());
-        productExist.setDescripcion(producto.getDescripcion());
-        productExist.setDireccion(producto.getDireccion());
-        productExist.setCategoria(producto.getCategoria());
-        productExist.setCiudad(producto.getCiudad());
-        productExist.setImagenes(producto.getImagenes());
-        productExist.setCaracteristicas(producto.getCaracteristicas());
+        Producto productExist=repository.findById(id).orElseThrow(()->new NotFoundException("Producto no encontrado"));
+        BeanUtils.copyProperties(producto,productExist,"id");
         repository.save(productExist);
     }
 
